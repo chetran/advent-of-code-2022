@@ -4,7 +4,7 @@ inputs = []
 with open("input.txt", "r") as file:
     reader = file.readlines()
     for line in reader:
-        # Returns a list only numbers. Basically a split but by multiplte characters
+        # Returns a list with only numbers. Basically a split by multiplte characters
         inputs.append(re.findall(r"[\w']+",line.strip()))
 
 
