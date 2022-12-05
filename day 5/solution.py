@@ -62,28 +62,23 @@ class stackers:
             self.stack.append([])
 
 
-def Part1():
-    stack = stackers(unorg_stack)
+def printAnswer(stack):
+    print("After the rearrangement: ", end="")
+    for i in stack.stack:
+        print(i[0], end="")
+    print()
+
+
+def Solution():
+    CM9000 = stackers(unorg_stack)
+    CM9001 = stackers(unorg_stack)
     for move in moves:
         if len(move) != 0:
             # Turns the list of strings into ints 
-            stack.move([eval(i) for i in move], "CM9000")
-    print("After the rearrangement: ", end="")
-    for i in stack.stack:
-        print(i[0], end="")
-    print()
-
-    
-def Part2():
-    stack = stackers(unorg_stack)
-    for move in moves:
-        if len(move) != 0:
-            stack.move([eval(i) for i in move])
-    print("After the rearrangement: ", end="")
-    for i in stack.stack:
-        print(i[0], end="")
-    print()
+            CM9000.move([eval(i) for i in move], "CM9000")
+            CM9001.move([eval(i) for i in move])
+    printAnswer(CM9000)
+    printAnswer(CM9001)
 
 
-Part1()
-Part2()
+Solution()
