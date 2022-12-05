@@ -2,45 +2,44 @@ import re
 
 unorg_stack = []
 moves = []
+stacks_count = 0
+
 
 with open("input.txt", "r") as file:
     reader = file.readlines()
-    for line in reader:
-        if line[1].isdigit():
-            break
-        unorg_stack.append(line)
-    # Honestly should do this in the loop above
-    read = False
+    done_with_stacks = False
     for line in reader:
         if not line.strip():
-            read = True
-        if read:
-            # Each move will be a list of 3 integers, first one for "amount of boxes", second one "from where" and thrid "to where?"
+            done_with_stacks = True
+        if not done_with_stacks:
+            unorg_stack.append(line)
+            # Divide by 4 because each stack are 4 characters apart
+            stacks_count = len(line) // 4 
+        elif done_with_stacks:
             moves.append(re.findall(r"\d+", line))
         
-
 class stackers:
     def __init__(self, stacks) -> None:
-        # Should find a way to not hard code all the list 
-        self.stack = [[], [], [], [], [], [], [], [], [],]
+        self.stack = []
+        self.makeStacks()
         self.makeEachStack()
+
 
     def makeEachStack(self):
         for row in range(len(unorg_stack)):
-            i = 0 
+            stack = 0 
             for col in range(1 , len(unorg_stack[row]), 4):
                 # Reason for this if case instead of 'if != "" ' is because for some reason it didn't work, when it really should be the same thing 
-                if ord(unorg_stack[row][col]) != 32:
-                    self.stack[i].append(unorg_stack[row][col])
-                i += 1
-    
+                if ord(unorg_stack[row][col]) != 32 and not unorg_stack[row][col].isdigit():
+                    self.stack[stack].append(unorg_stack[row][col])
+                stack += 1
+
+
     def move(self, instruc, model="CM9001"):
         # Our stacks are 0 indexed thats why we need to do intruc[x] - 1 when accessing our stack.
         move = []
         new_stack = []
-        # Amount of boxes
         for box in range(instruc[0]):
-            # Move from 
             move.append(self.stack[instruc[1] - 1][box])
         
         # Reason for reversing is that we want the box at the bottom of the stack we're moving from to be at the top when we're done
@@ -58,6 +57,10 @@ class stackers:
         # Lastly this new stack we made should be how the stack should look like when we're done 
         self.stack[instruc[2] - 1] = new_stack
         
+    def makeStacks(self):
+        for stack in range(stacks_count):
+            self.stack.append([])
+
 
 def Part1():
     stack = stackers(unorg_stack)
@@ -70,18 +73,17 @@ def Part1():
         print(i[0], end="")
     print()
 
-
+    
 def Part2():
     stack = stackers(unorg_stack)
     for move in moves:
         if len(move) != 0:
-            # Turns the list of strings into ints 
-            stack.move([eval(i) for i in move],)
+            stack.move([eval(i) for i in move])
     print("After the rearrangement: ", end="")
     for i in stack.stack:
         print(i[0], end="")
     print()
 
-    
+
 Part1()
 Part2()
