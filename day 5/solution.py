@@ -62,9 +62,9 @@ class stackers:
             self.stack.append([])
 
 
-def printAnswer(stack):
+def printAnswer(machine):
     print("After the rearrangement: ", end="")
-    for i in stack.stack:
+    for i in machine.stack:
         print(i[0], end="")
     print()
 
